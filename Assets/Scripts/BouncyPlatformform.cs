@@ -3,13 +3,11 @@ using UnityEngine;
 public class NewMonoBehaviourScript : MonoBehaviour
 {
 
-    public float speed = 5f;
-    public Rigidbody rigidPlayer;
-    private Rigidbody rigid;
+    private float bounceStrength = 5f; 
 
     void Start()
     {
-        rigid = transform.GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
@@ -17,7 +15,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
     {
         if (collidedWithThis.transform.name == "Player")
         {
-            rigidPlayer.linearVelocity = transform.up * speed;
+            Rigidbody collideObject = collidedWithThis.rigidbody;
+            collideObject.linearVelocity = transform.up * bounceStrength;
         }
     }
 }
