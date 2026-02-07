@@ -22,6 +22,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
             Vector3 normal = collidedWithThis.contacts[0].normal;
             Vector3 reflectedDirection = Vector3.Reflect(incomingVelocity.normalized, normal);
             collideObject.AddForce(reflectedDirection * bounceStrength, ForceMode.Impulse);
+
+            RotatePlayer(collideObject, reflectedDirection);
+
         }
     }
 
