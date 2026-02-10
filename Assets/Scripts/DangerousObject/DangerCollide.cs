@@ -1,12 +1,20 @@
 using UnityEngine;
 
-public class DangerCollide : MonoBehaviour
+public class PlayerDeath : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision)
+    public GameObject gameOverUI;
+
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Danger"))
+        if (other.CompareTag("Danger"))
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        gameOverUI.SetActive(true);
+        Destroy(gameObject);
     }
 }
