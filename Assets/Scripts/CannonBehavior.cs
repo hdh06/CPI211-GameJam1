@@ -4,19 +4,16 @@ public class CannonBehavior : MonoBehaviour
 {
     [SerializeField] private GameObject ball; // Player-controlled ball
     [SerializeField] private float shotMagnitude = 15f; // Intensity of shot from cannon
-    [SerializeField] private float cannonRotationSpeed = 14f;
+    [SerializeField] private float cannonRotationSpeed = 20f;
     
     private Rigidbody rbBall; // Physics object for ball
     private bool spacePressed = false; // Key to trigger cannon
-    bool gameStarted = false; // True after cannon shoots the ball
+    public bool gameStarted = false; // True after cannon shoots the ball
     
     void Start()
     {
         // Places ball directly above placeholder cannon shape
         rbBall = ball.GetComponent<Rigidbody>();
-
-        // May not be needed after cannon model is added, as the ball will be able to fall inside the cannon before it's shot
-        rbBall.useGravity = false;
     }
 
     void Update()
@@ -44,17 +41,17 @@ public class CannonBehavior : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (spacePressed && !gameStarted)
+        if (spacePressed)
         {
             Debug.Log("Space pressed -- cannon triggered");
             
-            // Re-enables gravity -- delete when cannon model is added (explanation above)
-            rbBall.useGravity = true;
-            
             // Shoots from the up axis of the cannon
             rbBall.AddForce(transform.up * shotMagnitude, ForceMode.Impulse);
-            
-            // Disables ability for this script to add force to the ball after it's in the air
+
+            // Disables this script (ability for the cannon to move or affect the ball) after ball is in the air
+            enabled = false;
+
+            // Used externally in player behavior script
             gameStarted = true;
             
         }
