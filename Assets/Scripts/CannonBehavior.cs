@@ -8,7 +8,7 @@ public class CannonBehavior : MonoBehaviour
     
     private Rigidbody rbBall; // Physics object for ball
     private bool spacePressed = false; // Key to trigger cannon
-    public bool gameStarted = false; // True after cannon shoots the ball
+    [HideInInspector] public bool gameStarted = false; // True after cannon shoots the ball
     
     void Start()
     {
