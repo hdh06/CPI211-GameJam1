@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
-    public int totalScore = 0;
+    [HideInInspector] public int totalScore = 0;
     public Text scoreText;
     
     void Awake()
@@ -12,7 +12,7 @@ public class ScoreManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {

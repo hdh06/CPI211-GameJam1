@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class CannonBehavior : MonoBehaviour
 {
-    [SerializeField] private GameObject ball; // Player-controlled ball
+    [SerializeField] private GameObject ball; // Player-controlled ball (chosen in Inspector)
+
     [SerializeField] private float shotMagnitude = 15f; // Intensity of shot from cannon
     [SerializeField] private float cannonRotationSpeed = 20f;
     
     private Rigidbody rbBall; // Physics object for ball
     private bool spacePressed = false; // Key to trigger cannon
-    public bool gameStarted = false; // True after cannon shoots the ball
+    [HideInInspector] public bool gameStarted = false; // True after cannon shoots the ball
     
     void Start()
     {
@@ -18,6 +19,7 @@ public class CannonBehavior : MonoBehaviour
 
     void Update()
     {
+
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             Debug.Log("Aiming left"); // Shows in Console view
@@ -43,16 +45,19 @@ public class CannonBehavior : MonoBehaviour
 
         if (spacePressed)
         {
-            Debug.Log("Space pressed -- cannon triggered");
             
             // Shoots from the up axis of the cannon
             rbBall.AddForce(transform.up * shotMagnitude, ForceMode.Impulse);
+
+            // Disables ability for ball to collide with cannon as it's being fired
+            Physics.IgnoreCollision(ball.transform.GetComponent<Collider>(), GetComponent<Collider>());
 
             // Disables this script (ability for the cannon to move or affect the ball) after ball is in the air
             enabled = false;
 
             // Used externally in player behavior script
             gameStarted = true;
+            if(gameStarted) Debug.Log("Game started!");
             
         }
     }

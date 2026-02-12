@@ -2,51 +2,37 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    // Below line is used to reference gameStarted variable in the cannon's script -- can be moved to a separate controller script
-    private CannonBehavior cannonBehavior;
+    // Below lines are used to reference gameStarted variable in the cannon's script
+    [HideInInspector] public CannonBehavior cannonBehavior;
+    [SerializeField] private GameObject cannon;
 
-    [SerializeField] float ballMovementSpeed = 60f; // Speed at which ball moves when left/right key is pressed
-    private Rigidbody rbBall;
-
-    // Player control variables
-    private bool movingLeft = false;
-    private bool movingRight = false;
+    // Player movement variables
+    [SerializeField] private float movementSpeed = 5f;
+    private Rigidbody rb;
+    private float moveInputX;
 
     void Start()
     {
-        rbBall = GetComponent<Rigidbody>();
+        cannonBehavior = cannon.GetComponent<CannonBehavior>();
+        rb = GetComponent<Rigidbody>();
+        gameObject.tag = "Player";
     }
 
     void Update()
     {
-        // Control ball movement, updated in FixedUpdate
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            movingLeft = true;
-        }
-
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            movingRight = true;
+        // Doesn't let you move until ball is shot from the cannon
+        if (cannonBehavior.gameStarted)
+        { 
+            // Player movement control (A / LeftArrow, D / RightArrow keys)
+            moveInputX = Input.GetAxis("Horizontal") * -1;
         }
     }
-
     void FixedUpdate()
     {
-        // CURRENTLY NOT WORKING PROPERLY!
-        if (cannonBehavior.gameStarted) {
-            if (movingLeft)
-            {
-                Debug.Log("Player moving left");
-                rbBall.AddForce(Vector3.left * ballMovementSpeed, ForceMode.Force);
-            }
-
-            if (movingRight)
-            {
-                Debug.Log("Player moving right");
-                rbBall.AddForce(Vector3.right * ballMovementSpeed, ForceMode.Force);
-
-            }
+        if (cannonBehavior.gameStarted)
+        {
+            // Changes velocity based on input
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x + moveInputX * movementSpeed * 0.1f, rb.linearVelocity.y, rb.linearVelocity.z);
         }
     }
 }
